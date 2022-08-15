@@ -1,4 +1,4 @@
-# Lotto Smart Contract
+# Ticket Smart Contract
 
 Smart Contract Lottery
 

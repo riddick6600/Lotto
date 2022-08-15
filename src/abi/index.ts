@@ -1,5 +1,7 @@
-import Lotto from "../../contracts/artifacts/Lotto_metadata.json";
+import Ticket from "../../contracts/artifacts/Ticket_metadata.json";
+import LotteryMachine from "../../contracts/artifacts/LotteryMachine_metadata.json";
 import Storage from "../../contracts/artifacts/Storage_metadata.json";
 
-export const lottoAbi = Lotto.output.abi;
+export const ticketAbi = Ticket.output.abi;
+export const lotteryMachineAbi = LotteryMachine.output.abi;
 export const storageAbi = Storage.output.abi;

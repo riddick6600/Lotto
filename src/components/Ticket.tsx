@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { LottoContext } from "../context/LottoContext";
+import { TicketContext } from "../context/TicketContext";
 
-export const Lotto = () => {
+export const Ticket = () => {
   const {
     contract,
     balance,
@@ -10,7 +10,7 @@ export const Lotto = () => {
     sendRegister,
     winner,
     playersLength,
-  } = useContext(LottoContext);
+  } = useContext(TicketContext);
 
   return (
     <div className="grid2">

@@ -1,7 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
-
-import "hardhat/console.sol";
+pragma solidity ^0.8.16;
 
 contract Storage {
     mapping (address => string) data;

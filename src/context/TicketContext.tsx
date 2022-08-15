@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ethers } from "ethers";
-import { lottoAbi } from "../abi";
+import { ticketAbi } from "../abi";
 
 const { ethereum } = window;
 
-export const LottoContext = React.createContext();
+export const TicketContext = React.createContext();
 
-export const LottoProvider = ({ children, contract }) => {
+export const TicketProvider = ({ children, contract }) => {
   const getProvider = () => new ethers.providers.Web3Provider(ethereum);
-  const createLottoContract = () =>
-    new ethers.Contract(contract, lottoAbi, getProvider().getSigner());
-  const lottoContract = createLottoContract();
+  const createTicketContract = () =>
+    new ethers.Contract(contract, ticketAbi, getProvider().getSigner());
+  const ticketContract = createTicketContract();
 
   const [players, setPlayers] = useState([]);
   const [playersLength, setPlayersLength] = useState(0);
@@ -28,22 +28,22 @@ export const LottoProvider = ({ children, contract }) => {
   };
 
   const getPrice = async () => {
-    const price = await lottoContract.getPrice();
+    const price = await ticketContract.getPrice();
     setPrice(ethers.utils.formatEther(price));
   };
 
   const getPlayers = async () => {
-    const getPlayersData = await lottoContract.getPlayers();
+    const getPlayersData = await ticketContract.getPlayers();
     setPlayers(getPlayersData);
   };
 
-  const getPlayerLength = async () => {
-    const length = await lottoContract.getPlayersLength();
+  const getLimit = async () => {
+    const length = await ticketContract.getLimit();
     setPlayersLength(length.toNumber());
   };
 
   const getWinner = async () => {
-    const winner = await lottoContract.getWinner();
+    const winner = await ticketContract.getWinner();
     if (winner !== "0x0000000000000000000000000000000000000000") {
       setWinner(winner);
     }
@@ -51,8 +51,9 @@ export const LottoProvider = ({ children, contract }) => {
 
   const sendRegister = async () => {
     try {
-      const tx = await lottoContract.register({
+      const tx = await ticketContract.register({
         value: ethers.utils.parseEther(price),
+        gasLimit: 10_000_000,
       });
       const res = await tx.wait();
     } catch (error) {
@@ -67,7 +68,7 @@ export const LottoProvider = ({ children, contract }) => {
     getBalance();
     getPlayers();
     getWinner();
-    getPlayerLength();
+    getLimit();
   };
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export const LottoProvider = ({ children, contract }) => {
   }, []);
 
   return (
-    <LottoContext.Provider
+    <TicketContext.Provider
       value={{
         contract,
         balance,
@@ -87,6 +88,6 @@ export const LottoProvider = ({ children, contract }) => {
       }}
     >
       {children}
-    </LottoContext.Provider>
+    </TicketContext.Provider>
   );
 };
