@@ -1,26 +1,33 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.0;
+
+import "hardhat/console.sol";
 
 contract Ticket {
-    address payable owner;
+    address private owner;
     uint price;
     uint limit;
+    uint balance;
+    uint commission = 3;
     address payable[] players;
     address winner;
     
 
-    constructor(uint _price, uint _limit) {
-        owner = payable(msg.sender);
+    constructor(address _address, uint _price, uint _limit) payable {
+        owner = _address;
         price = _price;
         limit = _limit;
+        balance += msg.value;
     }
     
-    function register() external payable {
-        require(msg.value == price, "Price is incorrect ${price}");
+    function register() public payable {
+        require(msg.value == price, "Price is incorrect");
         require(players.length < limit, "Too many players");
         players.push(payable(msg.sender));
+        balance += msg.value;
         if (players.length == limit) {
-            winner = players[random()];
+            uint rand = random();
+            winner = players[rand];
             payout(payable(winner));
         }
     }
@@ -32,8 +39,8 @@ contract Ticket {
 
     function payout(address payable _player) private {
         uint percent = address(this).balance / 100;
-        _player.transfer(address(this).balance - percent);
-        owner.transfer(address(this).balance);
+        _player.transfer(address(this).balance - percent * commission);
+        payable(owner).transfer(address(this).balance);
     }
 
     function getPrice() public view returns(uint) {
@@ -50,6 +57,18 @@ contract Ticket {
 
     function getWinner() public view returns(address) {
         return winner;
+    }
+
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+
+    function withdrow() public payable {
+        payable(owner).transfer(address(this).balance);
+    }
+
+    function getOwner() public view returns(address) {
+        return owner;
     }
 
 }

@@ -7,8 +7,8 @@ export const Lottery = () => {
   const { tickets } = useContext(LotteryMachineContext);
   return (
     <div>
-      {tickets.map((contract) => (
-        <TicketProvider contract={contract} key={contract}>
+      {tickets.map((address) => (
+        <TicketProvider address={address} key={address}>
           <Ticket />
           <hr />
         </TicketProvider>

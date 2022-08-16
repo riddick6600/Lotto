@@ -1,59 +1,71 @@
 import React, { useEffect, useState, useContext } from "react";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { ticketAbi } from "../abi";
+import { getSigner } from "../utils/getProvider";
 
 const { ethereum } = window;
 
 export const TicketContext = React.createContext();
 
-export const TicketProvider = ({ children, contract }) => {
-  const getProvider = () => new ethers.providers.Web3Provider(ethereum);
-  const createTicketContract = () =>
-    new ethers.Contract(contract, ticketAbi, getProvider().getSigner());
-  const ticketContract = createTicketContract();
-
+export const TicketProvider = ({ children, address }) => {
   const [players, setPlayers] = useState([]);
-  const [playersLength, setPlayersLength] = useState(0);
+  const [limit, setLimit] = useState(0);
   const [balance, setBalance] = useState("");
   const [price, setPrice] = useState("");
+  const [owner, setOwner] = useState("");
   const [winner, setWinner] = useState("");
+  const [contract, setContract] = useState<Contract>();
+
+  const initContract = async () => {
+    if (address) {
+      const contract = new ethers.Contract(address, ticketAbi, getSigner());
+      setContract(contract);
+    }
+  };
 
   const getBalance = async () => {
-    const ethBalance = await ethereum.request({
-      method: "eth_getBalance",
-      params: [contract],
-    });
+    const ethBalance = await contract.getBalance();
     const formatBalance = ethers.utils.formatEther(ethBalance);
     setBalance(formatBalance);
   };
 
   const getPrice = async () => {
-    const price = await ticketContract.getPrice();
+    const price = await contract.getPrice();
     setPrice(ethers.utils.formatEther(price));
   };
 
   const getPlayers = async () => {
-    const getPlayersData = await ticketContract.getPlayers();
+    const getPlayersData = await contract.getPlayers();
     setPlayers(getPlayersData);
   };
 
   const getLimit = async () => {
-    const length = await ticketContract.getLimit();
-    setPlayersLength(length.toNumber());
+    const length = await contract.getLimit();
+    setLimit(length.toNumber());
+  };
+
+  const getOwner = async () => {
+    const owner = await contract.getOwner();
+    console.log("owner", owner);
+    setOwner(owner);
   };
 
   const getWinner = async () => {
-    const winner = await ticketContract.getWinner();
+    const winner = await contract.getWinner();
     if (winner !== "0x0000000000000000000000000000000000000000") {
       setWinner(winner);
     }
   };
 
+  const withdrow = async () => {
+    await contract.withdrow({ gasLimit: 30_000_000 });
+  };
+
   const sendRegister = async () => {
     try {
-      const tx = await ticketContract.register({
+      const tx = await contract.register({
         value: ethers.utils.parseEther(price),
-        gasLimit: 10_000_000,
+        gasLimit: 30_000_000,
       });
       const res = await tx.wait();
     } catch (error) {
@@ -69,22 +81,27 @@ export const TicketProvider = ({ children, contract }) => {
     getPlayers();
     getWinner();
     getLimit();
+    getOwner();
   };
 
   useEffect(() => {
-    getAllData();
-  }, []);
+    !contract && initContract();
+    contract && getAllData();
+  }, [contract]);
 
   return (
     <TicketContext.Provider
       value={{
+        address,
         contract,
         balance,
         price,
         players,
         sendRegister,
         winner,
-        playersLength,
+        limit,
+        withdrow,
+        owner,
       }}
     >
       {children}

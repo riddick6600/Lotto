@@ -20,10 +20,20 @@ export const AccountProvider = ({ children }) => {
 
   const getAccount = async () => {
     const accounts = await ethereum.request({ method: "eth_accounts" });
-    setAccount(accounts[0]);
+    if (accounts.length) {
+      setAccount(accounts[0]);
+    } else {
+      requestAccounts();
+    }
   };
 
-  const getBalance = async (account) => {
+  const requestAccounts = async () => {
+    const requestAccounts = await ethereum.request({
+      method: "eth_requestAccounts",
+    });
+  };
+
+  const getBalance = async () => {
     const ethBalance = await ethereum.request({
       method: "eth_getBalance",
       params: [account],
@@ -40,11 +50,11 @@ export const AccountProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    account && getBalance(account);
+    account && getBalance();
   }, [account]);
 
   return (
-    <AccountContext.Provider value={{ account, balance }}>
+    <AccountContext.Provider value={{ account, balance, getAccount }}>
       {children}
     </AccountContext.Provider>
   );

@@ -3,7 +3,8 @@ import { AccountContext } from "../context/AccountContext";
 import { StorageContext } from "../context/StorageContext";
 
 export const Storage = () => {
-  const { data, sendData } = useContext(StorageContext);
+  const { data, contract, sendData, deployContract } =
+    useContext(StorageContext);
   const [localData, setLocalData] = useState("");
 
   const onChangeHandler = (event) => {
@@ -12,15 +13,24 @@ export const Storage = () => {
 
   return (
     <div>
-      <h3>Storage: {data}</h3>
-      <input
-        placeholder="New Data"
-        type="text"
-        name="localData"
-        onChange={onChangeHandler}
-        value={localData}
-      />
-      <button onClick={() => sendData(localData)}>Save</button>
+      <hr />
+      <button onClick={deployContract}>Deploy new Storage</button>
+
+      <h3>Storage: {contract && contract.address}</h3>
+      {contract && (
+        <>
+          <textarea
+            placeholder="New Data"
+            type="text"
+            name="localData"
+            onChange={onChangeHandler}
+            value={localData}
+          />
+          <br />
+          <button onClick={() => sendData(localData)}>Save</button>
+          <div>{data && data.map((elem) => <p key={elem}>{elem}</p>)}</div>
+        </>
+      )}
     </div>
   );
 };
