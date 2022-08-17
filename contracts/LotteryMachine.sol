@@ -1,18 +1,22 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/finance/PaymentSplitter.sol";
+import "hardhat/console.sol";
 import "./Ticket.sol";
 
-contract LotteryMachine {
+contract LotteryMachine is PaymentSplitter {
     address private owner;
-    uint balance;
+    address private myAddress;
     Ticket[] tickets;
 
-    constructor() payable {
+    constructor() {
+        console.log("constructor");
+        console.log("owner1", owner);
         owner = msg.sender;
-        balance += msg.value;
-        Ticket ticket = new Ticket(owner, 1 ether, 2);
-        tickets.push(ticket);
+        myAddress = address(this);
+        console.log("owner2", owner);
+        console.log("myAddress", myAddress);
     }
 
     function getTickets() public view returns(Ticket[] memory) {
@@ -22,7 +26,7 @@ contract LotteryMachine {
     function createTicket(uint _price, uint _limit) public payable returns(Ticket) {
         require(_limit > 1, "Limit must be from 2 to 255");
         require(_limit < 256, "Limit must be from 2 to 255");
-        Ticket ticket = new Ticket(msg.sender, _price, _limit);
+        Ticket ticket = new Ticket(owner, _price, _limit);
         tickets.push(ticket);
         return ticket;
     }
@@ -31,8 +35,8 @@ contract LotteryMachine {
         return address(this).balance;
     }
 
-    function withdrow() public payable {
-        payable(owner).transfer(address(this).balance);
+    function withdrow() public {
+        payable(owner).transfer(getBalance());
     }
 
     function getOwner() public view returns(address) {

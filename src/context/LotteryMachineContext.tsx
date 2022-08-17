@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { ethers, ContractFactory, Contract } from "ethers";
 import { lotteryMachineAbi, lotteryMachineBytecode } from "../abi";
 import { getSigner } from "../utils/getProvider";
-import { AccountContext } from "./AccountContext";
 
 const { ethereum } = window;
 
@@ -11,6 +10,7 @@ export const LotteryMachineContext = React.createContext();
 export const LotteryMachineProvider = ({ children }) => {
   const [tickets, setTickets] = useState([]);
   const [balance, setBalance] = useState("");
+  const [owner, setOwner] = useState("");
   const [contract, setContract] = useState<Contract>();
 
   const initContract = async () => {
@@ -56,8 +56,13 @@ export const LotteryMachineProvider = ({ children }) => {
     setTickets(tickets);
   };
 
+  const getOwner = async () => {
+    const owner = await contract.getOwner();
+    setOwner(owner);
+  };
+
   const withdrow = async () => {
-    const tx = await contract.withdrow({ gasLimit: 30_000_000 });
+    const tx = await contract.withdrow({ gasLimit: 1_000_000 });
 
     const data = await tx.wait();
     getAllData();
@@ -81,6 +86,7 @@ export const LotteryMachineProvider = ({ children }) => {
   const getAllData = () => {
     getBalance();
     getTickets();
+    getOwner();
   };
 
   useEffect(() => {
@@ -100,6 +106,7 @@ export const LotteryMachineProvider = ({ children }) => {
         createTicket,
         deployMachine,
         withdrow,
+        owner,
       }}
     >
       {children}

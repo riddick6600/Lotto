@@ -13,7 +13,7 @@ export const Storage = () => {
 
   return (
     <div>
-      <hr />
+      <br />
       <button onClick={deployContract}>Deploy new Storage</button>
 
       <h3>Storage: {contract && contract.address}</h3>

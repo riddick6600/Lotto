@@ -3,8 +3,15 @@ import { Lottery, Input } from "../components";
 import { LotteryMachineContext } from "../context/LotteryMachineContext";
 
 export const LotteryMachine = () => {
-  const { contract, balance, tickets, createTicket, deployMachine, withdrow } =
-    useContext(LotteryMachineContext);
+  const {
+    contract,
+    balance,
+    tickets,
+    createTicket,
+    deployMachine,
+    withdrow,
+    owner,
+  } = useContext(LotteryMachineContext);
 
   const handleClick = () => {
     createTicket(
@@ -28,6 +35,7 @@ export const LotteryMachine = () => {
       <div>LotteryMachine: {contract && contract.address}</div>
       {contract && (
         <>
+          <div>Owner: {owner}</div>
           <div>Balance: {balance}</div>
           <br />
           <div>

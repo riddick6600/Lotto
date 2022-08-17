@@ -46,7 +46,6 @@ export const TicketProvider = ({ children, address }) => {
 
   const getOwner = async () => {
     const owner = await contract.getOwner();
-    console.log("owner", owner);
     setOwner(owner);
   };
 
@@ -58,14 +57,14 @@ export const TicketProvider = ({ children, address }) => {
   };
 
   const withdrow = async () => {
-    await contract.withdrow({ gasLimit: 30_000_000 });
+    await contract.withdrow({ gasLimit: 1с_000_000 });
   };
 
   const sendRegister = async () => {
     try {
       const tx = await contract.register({
         value: ethers.utils.parseEther(price),
-        gasLimit: 30_000_000,
+        gasLimit: 1_000_000,
       });
       const res = await tx.wait();
     } catch (error) {
