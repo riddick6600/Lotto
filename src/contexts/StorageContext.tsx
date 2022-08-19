@@ -1,21 +1,14 @@
-declare global {
-  interface Window {
-    ethereum: any;
-  }
-}
-
 import React, { useEffect, useState, useContext } from "react";
 import { ethers, ContractFactory, Contract } from "ethers";
-import { storageAbi, storageBytecode } from "../abi";
-import { AccountContext } from "./AccountContext";
-import { getSigner } from "../utils/getProvider";
 
-const { ethereum } = window;
+import { storageAbi, storageBytecode } from "@abi";
+import { getSigner } from "@utils";
 
-export const StorageContext = React.createContext();
+export const StorageContext = React.createContext({});
+
+const LOCAL_STORAGE_STORAGE_CONTRACT_ADDRESS = "Lotto.Storage.contract.address";
 
 export const StorageProvider = ({ children }) => {
-  const { account } = useContext(AccountContext);
   const [contract, setContract] = useState<Contract>();
   const [data, setData] = useState("");
 
@@ -27,7 +20,7 @@ export const StorageProvider = ({ children }) => {
       console.error("ERROROORO", error.code);
       if (error.code === "CALL_EXCEPTION") {
         if (confirm("Стереть ID контракта из LocalStorage")) {
-          localStorage.removeItem("Lotto.Storage.contract.address");
+          localStorage.removeItem(LOCAL_STORAGE_STORAGE_CONTRACT_ADDRESS);
           setContract(null);
         }
       }
@@ -41,7 +34,9 @@ export const StorageProvider = ({ children }) => {
   };
 
   const initContract = async () => {
-    const address = localStorage.getItem("Lotto.Storage.contract.address");
+    const address = localStorage.getItem(
+      LOCAL_STORAGE_STORAGE_CONTRACT_ADDRESS
+    );
 
     if (address) {
       const contract = new ethers.Contract(address, storageAbi, getSigner());
@@ -50,6 +45,7 @@ export const StorageProvider = ({ children }) => {
   };
 
   const deployContract = async () => {
+    console.log("deployContract");
     const factory = new ContractFactory(
       storageAbi,
       storageBytecode,
@@ -57,16 +53,16 @@ export const StorageProvider = ({ children }) => {
     );
     const contract = await factory.deploy();
     setContract(contract);
-    localStorage.setItem("Lotto.Storage.contract.address", contract.address);
+    localStorage.setItem(
+      LOCAL_STORAGE_STORAGE_CONTRACT_ADDRESS,
+      contract.address
+    );
   };
 
   useEffect(() => {
+    !contract && initContract();
     contract && getData();
   }, [contract]);
-
-  useEffect(() => {
-    initContract();
-  }, [account]);
 
   return (
     <StorageContext.Provider

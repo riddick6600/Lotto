@@ -1,55 +1,57 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 contract Ticket {
     address private owner;
     uint price;
     uint limit;
-    uint balance;
-    uint commission = 3;
+    uint commission = 1;
     address[] players;
-    address winner;
-    
 
-    constructor(address _address, uint _price, uint _limit) payable {
-        console.log("constructor");
-        console.log("msg.sender:", msg.sender);
-        console.log("owner1", owner);
+    struct WinnerLog {
+        address winner;
+        uint number;
+        uint rand;
+    }
+    WinnerLog winner;
+
+    constructor(address _address, uint _price, uint _limit, uint _commission) payable {
         owner = _address;
         price = _price;
+        require(_limit > 1, "Limit must be 2 to 1000");
+        require(_limit < 1001, "Limit must be 2 to 1000");
         limit = _limit;
-        balance += msg.value;
-        console.log("owner2", owner);
+        require(_commission > 0, "Commission must be 0 to 99");
+        require(_commission < 100, "Commission must be 0 to 99");
+        commission = _commission;
     }
+
+    receive() external payable {}
     
     function register() public payable {
-        require(msg.value == price, "Price is incorrect");
+        require(msg.value >= price, "Price is upper");
         require(players.length < limit, "Too many players");
         players.push(msg.sender);
-        balance += msg.value;
         if (players.length == limit) {
             uint rand = random();
-            winner = players[rand];
-            payout(winner);
+            address winnerAddress = players[random()];
+            winner = WinnerLog(winnerAddress, block.number, rand);
+            payout(winnerAddress);
         }
     }
 
 
-    function random() private view returns(uint){
+    function random() private view returns(uint) {
+        // TODO GD check random!!
         return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players))) % limit;
     }
 
     function payout(address _player) private {
-        uint percent = getBalance() / 100;
-        console.log("Pay winner _player:", _player);
-        console.log("getBalance()", getBalance());
-        console.log("getBalance() - percent * commission", getBalance() - percent * commission);
-        payable(_player).transfer(getBalance() - percent * commission);
-        console.log("Pay comission to owner:", owner);
+        uint balance = getBalance();
+        uint percent = balance / 100;
+        uint winSize = balance - percent * commission;
+        payable(_player).transfer(winSize);
         payable(owner).transfer(getBalance());
-        console.log("Payed comission, balance:", getBalance());
     }
 
     function getPrice() public view returns(uint) {
@@ -64,16 +66,13 @@ contract Ticket {
         return players;
     }
 
-    function getWinner() public view returns(address) {
+
+    function getWinner() public view returns(WinnerLog memory) {
         return winner;
     }
 
     function getBalance() public view returns(uint) {
         return address(this).balance;
-    }
-
-    function withdrow() public {
-        payable(owner).transfer(address(this).balance);
     }
 
     function getOwner() public view returns(address) {

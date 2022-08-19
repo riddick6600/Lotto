@@ -1,7 +1,17 @@
 body {
   background: black;
-  color: greenyellow;
+  color: yellow;
   font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+}
+
+.container {
+  text-align: center;
+  margin-top: 200px;
+}
+
+.grid {
+  display: grid;
 }
 
 .grid2 {
@@ -12,4 +22,48 @@ body {
 .grid4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+}
+
+a,
+a:visited {
+  color: yellow;
+  text-decoration: none;
+}
+
+.logo {
+  height: 30px;
+}
+
+.nav_balance {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+}
+
+.nav_left > a {
+  vertical-align: middle;
+}
+
+.button {
+  border: 1px solid yellowgreen;
+  background: yellow;
+  padding: 6px 8px;
+  border-radius: 5px;
+  box-shadow: 2px 2px silver;
+  cursor: pointer;
+}
+
+.button_big {
+  font-size: larger;
+  padding: 8px 12px;
+}
+
+.button:hover {
+  box-shadow: 1px 1px silver;
+  margin: 1px 1px;
+}
+
+.button:active {
+  margin: 2px 2px;
+  box-shadow: none;
 }

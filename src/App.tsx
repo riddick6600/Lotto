@@ -1,24 +1,17 @@
 import React from "react";
-import { AccountProvider } from "./context/AccountContext";
-import { StorageProvider } from "./context/StorageContext";
-import { LotteryMachineProvider } from "./context/LotteryMachineContext";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { Auth } from "./Auth";
+import { AccountProvider } from "@contexts";
 
-import { Wallet, LotteryMachine, Lottery, Storage } from "./components";
+import { Header } from "@components";
 
 export const App = () => (
-  <AccountProvider>
-    <div className="grid2">
-      <div>
-        <Wallet />
-        <StorageProvider>
-          <Storage />
-        </StorageProvider>
-      </div>
-      <div>
-        <LotteryMachineProvider>
-          <LotteryMachine />
-        </LotteryMachineProvider>
-      </div>
-    </div>
-  </AccountProvider>
+  <Router>
+    <AccountProvider>
+      <Header />
+      <Auth />
+      <ToastContainer />
+    </AccountProvider>
+  </Router>
 );

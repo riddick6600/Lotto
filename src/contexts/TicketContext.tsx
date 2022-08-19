@@ -1,9 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Contract, ethers } from "ethers";
-import { ticketAbi } from "../abi";
-import { getSigner } from "../utils/getProvider";
+import { BigNumber, Contract, ethers } from "ethers";
+import { ticketAbi } from "@abi";
+import { getProvider, getSigner } from "@utils";
+import { GAS_LIMIT } from "@constants";
 
-const { ethereum } = window;
+type TWinner = {
+  winner: string;
+  difficulty: BigNumber;
+  timestamp: BigNumber;
+  number: BigNumber;
+};
 
 export const TicketContext = React.createContext();
 
@@ -13,7 +19,7 @@ export const TicketProvider = ({ children, address }) => {
   const [balance, setBalance] = useState("");
   const [price, setPrice] = useState("");
   const [owner, setOwner] = useState("");
-  const [winner, setWinner] = useState("");
+  const [winner, setWinner] = useState<TWinner>();
   const [contract, setContract] = useState<Contract>();
 
   const initContract = async () => {
@@ -50,23 +56,21 @@ export const TicketProvider = ({ children, address }) => {
   };
 
   const getWinner = async () => {
-    const winner = await contract.getWinner();
-    if (winner !== "0x0000000000000000000000000000000000000000") {
+    const winner: TWinner = await contract.getWinner();
+    if (winner.winner !== "0x0000000000000000000000000000000000000000") {
+      const block = await getProvider().getBlock(winner.number.toNumber());
       setWinner(winner);
     }
-  };
-
-  const withdrow = async () => {
-    await contract.withdrow({ gasLimit: 1с_000_000 });
   };
 
   const sendRegister = async () => {
     try {
       const tx = await contract.register({
         value: ethers.utils.parseEther(price),
-        gasLimit: 1_000_000,
+        gasLimit: GAS_LIMIT,
       });
       const res = await tx.wait();
+      getAllData();
     } catch (error) {
       console.error("Error", error);
       alert(error.data.message);
@@ -99,7 +103,6 @@ export const TicketProvider = ({ children, address }) => {
         sendRegister,
         winner,
         limit,
-        withdrow,
         owner,
       }}
     >

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { TicketProvider } from "../context/TicketContext";
-import { LotteryMachineContext } from "../context/LotteryMachineContext";
+import { TicketProvider } from "@contexts/TicketContext";
+import { LotteryMachineContext } from "@contexts/LotteryMachineContext";
 import { Ticket } from "./Ticket";
 
 export const Lottery = () => {

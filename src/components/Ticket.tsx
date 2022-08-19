@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
-import { TicketContext } from "../context/TicketContext";
+import { TicketContext } from "@contexts/TicketContext";
 
 export const Ticket = () => {
   const {
-    address,
     contract,
     balance,
     price,
@@ -11,7 +10,6 @@ export const Ticket = () => {
     sendRegister,
     winner,
     limit,
-    withdrow,
     owner,
   } = useContext(TicketContext);
 
@@ -24,7 +22,13 @@ export const Ticket = () => {
         <div>Balance: {balance} ETH</div>
         <br />
         {winner ? (
-          <h4>Winner: {winner}</h4>
+          <>
+            <h4>
+              Winner: {winner.winner}
+              <br />
+              Block.number: {winner.number.toNumber()}
+            </h4>
+          </>
         ) : (
           <div>
             <h4>WIN: ~ {price * limit} ETH</h4>
@@ -34,9 +38,6 @@ export const Ticket = () => {
             </button>
           </div>
         )}
-        <button type="button" onClick={withdrow}>
-          Withdrow
-        </button>
       </div>
       <div>
         Players of {limit}:
