@@ -26,8 +26,11 @@ contract Ticket {
         commission = _commission;
     }
 
-    receive() external payable {}
-    
+    event Received(address, uint);
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
+    }
+        
     function register() public payable {
         require(msg.value >= price, "Price is upper");
         require(players.length < limit, "Too many players");

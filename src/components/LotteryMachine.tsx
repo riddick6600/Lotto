@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { Lottery } from "@components";
-import { LotteryMachineContext } from "@contexts/LotteryMachineContext";
+import { LotteryMachineContext } from "@contexts";
 
 export const LotteryMachine = () => {
-  const { contract, balance, tickets, createTicket, deployMachine, owner } =
-    useContext(LotteryMachineContext);
+  const { contract, balance, createTicket, owner } = useContext(
+    LotteryMachineContext
+  );
 
   const handleClick = () => {
     createTicket(
@@ -15,7 +16,6 @@ export const LotteryMachine = () => {
 
   return (
     <div>
-      <button onClick={deployMachine}>Deploy New Machine</button>
       <br />
       <br />
       <div>LotteryMachine: {contract && contract.address}</div>

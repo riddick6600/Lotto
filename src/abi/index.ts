@@ -1,15 +1,15 @@
-import Ticket from "../../contracts/artifacts/Ticket_metadata.json";
+import Ticket from "@contracts/artifacts/Ticket_metadata.json";
 
-import LotteryMachineMetadata from "../../contracts/artifacts/LotteryMachine_metadata.json";
-import LotteryMachine from "../../contracts/artifacts/LotteryMachine.json";
+import LotteryMachineMetadata from "@contracts/artifacts/LotteryMachine_metadata.json";
+import LotteryMachine from "@contracts/artifacts/LotteryMachine.json";
 
-import StorageMetadata from "../../contracts/artifacts/Storage_metadata.json";
-import Storage from "../../contracts/artifacts/Storage.json";
+import CasinoMetadata from "@contracts/artifacts/Casino_metadata.json";
+import Casino from "@contracts/artifacts/Casino.json";
 
 export const ticketAbi = Ticket.output.abi;
 
 export const lotteryMachineAbi = LotteryMachineMetadata.output.abi;
 export const lotteryMachineBytecode = LotteryMachine.data.bytecode;
 
-export const storageAbi = StorageMetadata.output.abi;
-export const storageBytecode = Storage.data.bytecode;
+export const casinoAbi = CasinoMetadata.output.abi;
+export const casinoBytecode = Casino.data.bytecode;

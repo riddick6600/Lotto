@@ -32,7 +32,6 @@ export const AccountProvider = ({ children }) => {
   };
 
   const requestAccounts = async () => {
-    console.log("requestAccounts", requestAccounts);
     try {
       await ethereum.request({
         method: "eth_requestAccounts",
@@ -43,12 +42,10 @@ export const AccountProvider = ({ children }) => {
   };
 
   const getBalance = async () => {
-    console.log("getBalance", account);
     const ethBalance = await ethereum.request({
       method: "eth_getBalance",
       params: [account],
     });
-    console.log("ethBalance", ethBalance);
     const formatBalance = ethers.utils.formatEther(ethBalance);
     setBalance(formatBalance);
     return formatBalance;

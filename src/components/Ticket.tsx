@@ -4,46 +4,48 @@ import { TicketContext } from "@contexts/TicketContext";
 export const Ticket = () => {
   const {
     contract,
+    owner,
     balance,
     price,
     players,
     sendRegister,
     winner,
     limit,
-    owner,
   } = useContext(TicketContext);
 
-  return (
-    <div className="grid2">
-      <div>
-        <div>Ticket: {contract && contract.address}</div>
-        <div>Owner: {owner}</div>
-        <br />
-        <div>Balance: {balance} ETH</div>
-        <br />
-        {winner ? (
-          <>
-            <h4>
-              Winner: {winner.winner}
-              <br />
-              Block.number: {winner.number.toNumber()}
-            </h4>
-          </>
-        ) : (
-          <div>
-            <h4>WIN: ~ {price * limit} ETH</h4>
+  if (!balance) {
+    return null;
+  }
 
-            <button type="button" onClick={sendRegister}>
-              Buy {price} ETH
-            </button>
-          </div>
-        )}
-      </div>
+  return (
+    <div className="ticket text-center">
       <div>
-        Players of {limit}:
-        {players.map((player, index) => (
+        <div>Ticket: {contract && `...` + contract.address.substr(-6)}</div>
+        <div>Balance: {balance && `${balance} ETH`}</div>
+        <div>Owner: {owner}</div>
+        <div>
+          Players {players.length ?? 0} of {limit}:
+          {/* {players.map((player, index) => (
           <div key={player + index}>{player}</div>
-        ))}
+        ))} */}
+        </div>
+        <div>
+          {winner ? (
+            <div>
+              <div>Winner: ...{winner.winner.substr(-6)}</div>
+              <div>Block.number: {winner.number.toNumber()}</div>
+              <div>Link to transacrion</div>
+            </div>
+          ) : (
+            <div>
+              <h2>WIN ~{price * limit}&nbsp;ETH!</h2>
+
+              <button className="button button_large" onClick={sendRegister}>
+                Buy {price} ETH
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

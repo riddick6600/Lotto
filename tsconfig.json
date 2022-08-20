@@ -15,7 +15,8 @@
       "@contexts": ["contexts"],
       "@pages": ["pages"],
       "@types": ["types"],
-      "@utils": ["utils"]
+      "@utils": ["utils"],
+      "@contracts": ["../contracts"]
     }
   }
 }

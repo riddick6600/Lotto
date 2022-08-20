@@ -72,8 +72,7 @@ export const TicketProvider = ({ children, address }) => {
       const res = await tx.wait();
       getAllData();
     } catch (error) {
-      console.error("Error", error);
-      alert(error.data.message);
+      toast(error.data.message, { type: "error" });
     }
     getAllData();
   };

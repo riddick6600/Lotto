@@ -19,9 +19,27 @@ body {
   grid-template-columns: repeat(2, 1fr);
 }
 
-.grid4 {
+.tickets_grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media screen and (min-width: 796px) {
+  .tickets_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .tickets_grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .tickets_grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 a,
@@ -53,7 +71,7 @@ a:visited {
   cursor: pointer;
 }
 
-.button_big {
+.button_large {
   font-size: larger;
   padding: 8px 12px;
 }
@@ -66,4 +84,14 @@ a:visited {
 .button:active {
   margin: 2px 2px;
   box-shadow: none;
+}
+
+.ticket {
+  /* border: 1px red solid; */
+  padding: 20px;
+  margin: 20px;
+}
+
+.text-center {
+  text-align: center;
 }

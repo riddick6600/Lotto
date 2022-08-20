@@ -8,23 +8,30 @@ contract LotteryMachine {
     uint commission = 1;
     Ticket[] tickets;
 
-    uint[] defaultPrices = [0.01 ether, 0.1 ether, 1 ether, 10 ether, 100 ether];
-    uint[] defaultLimits = [2, 10, 100, 1000];
-
     function createStartTickets()  private {
-        for (uint i = 0; i <= defaultPrices.length; i++) {
-            for (uint j = 0; j <= defaultLimits.length; j++) {
-                tickets.push(new Ticket(address(this), defaultPrices[i] * (1 ether), defaultLimits[j], commission));
-            }
-        }
+        tickets.push(new Ticket(address(this), 0.1 ether, 2, commission));
+        tickets.push(new Ticket(address(this), 1 ether, 2, commission));
+        tickets.push(new Ticket(address(this), 10 ether, 2, commission));
+
+        // tickets.push(new Ticket(address(this), 0.1 ether, 10, commission));
+
+        // tickets.push(new Ticket(address(this), 1 ether, 100, commission));
+        // tickets.push(new Ticket(address(this), 10 ether, 100, commission));
+
+        // tickets.push(new Ticket(address(this), 0.01 ether, 1000, commission));
+        // tickets.push(new Ticket(address(this), 1 ether, 1000, commission));
     }
 
     constructor() {
         owner = msg.sender;
         createStartTickets();
     }
-    
-    receive() external payable {}
+
+
+    event Received(address, uint);
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
+    }
     
     function createTicket(uint _price, uint _limit) public payable returns(Ticket) {
         require(_limit > 1, "Limit must be from 2 to 255");

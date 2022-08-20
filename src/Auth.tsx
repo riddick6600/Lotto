@@ -12,14 +12,14 @@ export const Auth = () => {
     <div>
       {!account ? (
         <div className="container">
-          <button onClick={requestAccounts} className="button button_big">
+          <button onClick={requestAccounts} className="button button_large">
             Connect MetaMask
           </button>
         </div>
       ) : (
         <Routes>
-          <Route path="/" element={<div>---</div>} />
-          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={} /> */}
           {/* <Route path="/storage" element={<Storage />} /> */}
         </Routes>
       )}

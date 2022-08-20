@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { ethers, ContractFactory, Contract } from "ethers";
-import { lotteryMachineAbi, lotteryMachineBytecode } from "../abi";
+import { ethers, Contract } from "ethers";
+import { lotteryMachineAbi } from "../abi";
 import { getSigner } from "@utils";
 import { toast } from "react-toastify";
 import { GAS_LIMIT } from "@constants";
@@ -9,8 +9,7 @@ type TLotteryMachineContext = {
   contract?: Contract;
   balance: string;
   tickets: any[];
-  createTicket?: () => {};
-  deployMachine?: () => {};
+  createTicket?: (price: string, limmit: string) => {};
   owner: string;
 };
 
@@ -21,20 +20,13 @@ export const LotteryMachineContext =
     owner: "",
   });
 
-const LOCAL_STORAGE_LOTTERYMACHINE_CONTRACT_ADDRESS =
-  "Lotto.LotteryMachine.contract.address";
-
-export const LotteryMachineProvider = ({ children }) => {
+export const LotteryMachineProvider = ({ address, children }) => {
   const [tickets, setTickets] = useState([]);
   const [balance, setBalance] = useState("");
   const [owner, setOwner] = useState("");
   const [contract, setContract] = useState<Contract>();
 
-  const initContractFromLocalStorage = async () => {
-    const address = localStorage.getItem(
-      LOCAL_STORAGE_LOTTERYMACHINE_CONTRACT_ADDRESS
-    );
-
+  const initContract = async () => {
     if (address) {
       const contract = new ethers.Contract(
         address,
@@ -45,44 +37,10 @@ export const LotteryMachineProvider = ({ children }) => {
     }
   };
 
-  const getContract = async () => {
-    return contract;
-  };
-
-  const deployMachine = async () => {
-    try {
-      const factory = new ContractFactory(
-        lotteryMachineAbi,
-        lotteryMachineBytecode,
-        getSigner()
-      );
-      const contract = await factory.deploy({ gasLimit: GAS_LIMIT });
-      setContract(contract);
-      localStorage.setItem(
-        LOCAL_STORAGE_LOTTERYMACHINE_CONTRACT_ADDRESS,
-        contract.address
-      );
-    } catch (error) {
-      toast(`Error ${error.message}`, { type: "error" });
-    }
-  };
-
   const getBalance = async () => {
-    try {
-      const balance = await contract.getBalance();
-      const formatBalance = ethers.utils.formatEther(balance);
-      setBalance(formatBalance);
-    } catch (error) {
-      console.error("ERROROORO", error.code);
-      if (error.code === "CALL_EXCEPTION") {
-        if (confirm("Стереть ID контракта Машины из LocalStorage")) {
-          localStorage.removeItem(
-            LOCAL_STORAGE_LOTTERYMACHINE_CONTRACT_ADDRESS
-          );
-          setContract(undefined);
-        }
-      }
-    }
+    const balance = await contract.getBalance();
+    const formatBalance = ethers.utils.formatEther(balance);
+    setBalance(formatBalance);
   };
 
   const getTickets = async () => {
@@ -104,8 +62,7 @@ export const LotteryMachineProvider = ({ children }) => {
       await tx.wait();
       getAllData();
     } catch (error) {
-      console.error("Error", error);
-      alert(error.data.message);
+      toast(error.data.message, { type: "error" });
     }
   };
 
@@ -116,18 +73,21 @@ export const LotteryMachineProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    !contract && initContractFromLocalStorage();
     contract && getAllData();
   }, [contract]);
+
+  useEffect(() => {
+    address && initContract();
+  }, [address]);
 
   return (
     <LotteryMachineContext.Provider
       value={{
+        address,
         contract,
         balance,
         tickets,
         createTicket,
-        deployMachine,
         owner,
       }}
     >
