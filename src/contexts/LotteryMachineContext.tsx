@@ -55,6 +55,7 @@ export const LotteryMachineProvider = ({ address, children }) => {
 
   const createTicket = async (price: string, limmit: string) => {
     try {
+      console.log("create ticket");
       const tx = await contract.createTicket(
         ethers.utils.parseEther(price),
         parseInt(limmit)

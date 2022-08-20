@@ -25,13 +25,6 @@ contract Ticket {
         require(_commission < 100, "Commission must be 0 to 99");
         commission = _commission;
     }
-
-    event Received(address, uint);
-    receive() external payable {
-        emit Received(msg.sender, msg.value);
-    }
-    
-    fallback() external payable {}
         
     function register() public payable {
         require(msg.value >= price, "Price is upper");

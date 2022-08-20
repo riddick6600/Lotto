@@ -14,9 +14,7 @@ contract Casino {
         createMachine();
     }
     
-    event Received(address, uint);
     receive() external payable {
-        emit Received(msg.sender, msg.value);
     }
     
     fallback() external payable {}
@@ -41,6 +39,10 @@ contract Casino {
 
     function getCommision() public view returns(uint) {
         return commission;
-    }    
+    }
+
+    function withdrow() public {
+        payable(owner).transfer(getBalance());
+    }
 
 }

@@ -10,7 +10,7 @@ contract LotteryMachine {
     Ticket[] tickets;
 
     function createStartTickets()  private {
-        tickets.push(new Ticket(address(this), 0.1 ether, 2, commission));
+        tickets.push(new Ticket(msg.sender, 0.1 ether, 2, commission));
         tickets.push(new Ticket(address(this), 1 ether, 2, commission));
         tickets.push(new Ticket(address(this), 10 ether, 2, commission));
 
@@ -28,15 +28,14 @@ contract LotteryMachine {
         createStartTickets();
     }
 
-
-    event Received(address, uint);
     receive() external payable {
-        emit Received(msg.sender, msg.value);
+    }
+
+    fallback() external payable {
+        // payable(owner).transfer(msg.value);
     }
     
-    fallback() external payable {}
-    
-    function createTicket(uint _price, uint _limit) public payable returns(Ticket) {
+    function createTicket(uint _price, uint _limit) public returns(Ticket) {
         require(_limit > 1, "Limit must be from 2 to 255");
         require(_limit < 256, "Limit must be from 2 to 255");
         Ticket ticket = new Ticket(address(this), _price, _limit, commission);
@@ -58,6 +57,10 @@ contract LotteryMachine {
 
     function getCommision() public view returns(uint) {
         return commission;
-    }    
+    }
+
+    function withdrow() public {
+        payable(owner).transfer(getBalance());
+    }
 
 }

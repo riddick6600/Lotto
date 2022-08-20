@@ -20,15 +20,12 @@ export const Ticket = () => {
   return (
     <div className="ticket text-center">
       <div>
+        <img className="slot_img" src="/slot.webp" />
         <div>Ticket: {contract && `...` + contract.address.substr(-6)}</div>
+        <div>Owner: ...{owner.substr(-6)}</div>
         <div>Balance: {balance && `${balance} ETH`}</div>
-        <div>Owner: {owner}</div>
-        <div>
-          Players {players.length ?? 0} of {limit}:
-          {/* {players.map((player, index) => (
-          <div key={player + index}>{player}</div>
-        ))} */}
-        </div>
+        <div>Price: {price && `${price} ETH`}</div>
+        <br />
         <div>
           {winner ? (
             <div>
@@ -38,11 +35,18 @@ export const Ticket = () => {
             </div>
           ) : (
             <div>
-              <h2>WIN ~{price * limit}&nbsp;ETH!</h2>
-
               <button className="button button_large" onClick={sendRegister}>
-                Buy {price} ETH
+                WIN {price * limit} ETH!
               </button>
+
+              <div>
+                <h2>
+                  Players {players.length ?? 0} of {limit}:
+                </h2>
+                {players.map((player, index) => (
+                  <div key={player + index}>{player}</div>
+                ))}
+              </div>
             </div>
           )}
         </div>

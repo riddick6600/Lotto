@@ -9,7 +9,7 @@ import { METAMASK_LINK } from "@constants";
 export const Auth = () => {
   const { account, requestAccounts } = useContext(AccountContext);
   return (
-    <div>
+    <>
       {!account ? (
         <div className="container">
           <button onClick={requestAccounts} className="button button_large">
@@ -23,6 +23,6 @@ export const Auth = () => {
           {/* <Route path="/storage" element={<Storage />} /> */}
         </Routes>
       )}
-    </div>
+    </>
   );
 };

@@ -15,13 +15,13 @@ export const LotteryMachine = () => {
   };
 
   return (
-    <div>
-      <br />
-      <br />
-      <div>LotteryMachine: {contract && contract.address}</div>
+    <div className="machine">
       {contract && (
         <>
-          <div>Owner: {owner}</div>
+          <div>
+            LotteryMachine: ...{contract && contract.address.substr(-6)}
+          </div>
+          <div>Owner: ...{owner.substr(-6)}</div>
           <div>Balance: {balance}</div>
           <br />
           <div>

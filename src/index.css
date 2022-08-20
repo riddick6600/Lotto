@@ -5,11 +5,24 @@ body {
   font-weight: 600;
 }
 
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media screen and (min-width: 992px) {
+  .grid2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 
 .container {
   text-align: center;
   margin-top: 200px;
-}
+} */
 
+/* 
 .grid {
   display: grid;
 }
@@ -40,7 +53,7 @@ body {
   .tickets_grid {
     grid-template-columns: repeat(6, 1fr);
   }
-}
+} */
 
 a,
 a:visited {
@@ -65,6 +78,8 @@ a:visited {
 .button {
   border: 1px solid yellowgreen;
   background: yellow;
+  color: red;
+  font-weight: 700;
   padding: 6px 8px;
   border-radius: 5px;
   box-shadow: 2px 2px silver;
@@ -78,11 +93,9 @@ a:visited {
 
 .button:hover {
   box-shadow: 1px 1px silver;
-  margin: 1px 1px;
 }
 
 .button:active {
-  margin: 2px 2px;
   box-shadow: none;
 }
 
@@ -93,5 +106,13 @@ a:visited {
 }
 
 .text-center {
+  text-align: center;
+}
+
+.slot_img {
+  width: 150px;
+}
+
+.machine {
   text-align: center;
 }

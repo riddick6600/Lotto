@@ -10,7 +10,9 @@ export const App = () => (
   <Router>
     <AccountProvider>
       <Header />
-      <Auth />
+      <div className="container">
+        <Auth />
+      </div>
       <ToastContainer />
     </AccountProvider>
   </Router>

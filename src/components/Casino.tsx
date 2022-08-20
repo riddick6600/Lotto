@@ -12,17 +12,23 @@ export const Casino = () => {
     useContext(CasinoContext);
 
   return (
-    <div>
+    <div className="casino">
       <button onClick={deployCasino}>Deploy New Casino</button>
-      <div>Casino: {contract?.address}</div>
-      <div>Owner: {owner}</div>
-      <div>Balance: {balance}</div>
-      <button onClick={createMachine}>Create new Machine</button>
-      {machines.map((address) => (
-        <LotteryMachineProvider address={address} key={address}>
-          <LotteryMachine />
-        </LotteryMachineProvider>
-      ))}
+      {contract && (
+        <>
+          <div>Casino: {contract?.address}</div>
+          <div>Owner: {owner}</div>
+          <div>Balance: {balance}</div>
+          <button onClick={createMachine}>Create new Machine</button>
+          <div className="grid2">
+            {machines.map((address) => (
+              <LotteryMachineProvider address={address} key={address}>
+                <LotteryMachine />
+              </LotteryMachineProvider>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

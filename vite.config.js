@@ -21,4 +21,5 @@ export default defineConfig({
       "@contracts": path.resolve(__dirname, "contracts"),
     },
   },
+  publicDir: "public",
 });

@@ -6,7 +6,7 @@ import { Ticket } from "./Ticket";
 export const Lottery = () => {
   const { tickets } = useContext(LotteryMachineContext);
   return (
-    <div className="tickets_grid">
+    <div className="tickets_grid grid2">
       {tickets.map((address) => (
         <TicketProvider address={address} key={address}>
           <Ticket />
