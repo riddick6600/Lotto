@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
-import { TicketContext } from "@contexts/TicketContext";
+import { TicketContext, LotteryMachineContext } from "@contexts";
+import { getHash } from "@utils";
 
 export const Ticket = () => {
-  const {
-    contract,
-    owner,
-    balance,
-    price,
-    players,
-    sendRegister,
-    winner,
-    limit,
-  } = useContext(TicketContext);
+  const { contract, owner, balance, price, players, sendRegister, limit } =
+    useContext(TicketContext);
+  const { address } = useContext(LotteryMachineContext);
+
+  const winner = owner !== address ? owner : null;
+
+  console.log("winner", winner);
+  console.log("owner", owner);
+  console.log("address", address);
 
   if (!balance) {
     return null;
@@ -20,7 +20,7 @@ export const Ticket = () => {
   return (
     <div className="ticket text-center">
       <div>
-        <img className="slot_img" src="/slot.webp" />
+        <img className="ticket_img" src="/ticket.png" />
         <div>Ticket: {contract && `...` + contract.address.substr(-6)}</div>
         <div>Owner: ...{owner.substr(-6)}</div>
         <div>Balance: {balance && `${balance} ETH`}</div>
@@ -29,8 +29,10 @@ export const Ticket = () => {
         <div>
           {winner ? (
             <div>
-              <div>Winner: ...{winner.winner.substr(-6)}</div>
-              <div>Block.number: {winner.number.toNumber()}</div>
+              <div>
+                {price * limit} ETH Winner: {getHash(winner)}
+              </div>
+              {/* <div>Block.number: {winner.number.toNumber()}</div> */}
               <div>Link to transacrion</div>
             </div>
           ) : (
@@ -44,7 +46,7 @@ export const Ticket = () => {
                   Players {players.length ?? 0} of {limit}:
                 </h2>
                 {players.map((player, index) => (
-                  <div key={player + index}>{player}</div>
+                  <div key={player + index}>{getHash(player)}</div>
                 ))}
               </div>
             </div>

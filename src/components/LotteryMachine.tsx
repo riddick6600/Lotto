@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Lottery } from "@components";
 import { LotteryMachineContext } from "@contexts";
+import { getHash } from "@utils";
 
 export const LotteryMachine = () => {
   const { contract, balance, createTicket, owner } = useContext(
@@ -18,10 +19,9 @@ export const LotteryMachine = () => {
     <div className="machine">
       {contract && (
         <>
-          <div>
-            LotteryMachine: ...{contract && contract.address.substr(-6)}
-          </div>
-          <div>Owner: ...{owner.substr(-6)}</div>
+          <img className="slot_img" src="/slot.webp" />
+          <div>LotteryMachine: {contract && getHash(contract.address)}</div>
+          <div>Owner: {getHash(owner)}</div>
           <div>Balance: {balance}</div>
           <br />
           <div>

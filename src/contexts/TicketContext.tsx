@@ -4,13 +4,6 @@ import { ticketAbi } from "@abi";
 import { getProvider, getSigner } from "@utils";
 import { GAS_LIMIT } from "@constants";
 
-type TWinner = {
-  winner: string;
-  difficulty: BigNumber;
-  timestamp: BigNumber;
-  number: BigNumber;
-};
-
 export const TicketContext = React.createContext();
 
 export const TicketProvider = ({ children, address }) => {
@@ -19,7 +12,6 @@ export const TicketProvider = ({ children, address }) => {
   const [balance, setBalance] = useState("");
   const [price, setPrice] = useState("");
   const [owner, setOwner] = useState("");
-  const [winner, setWinner] = useState<TWinner>();
   const [contract, setContract] = useState<Contract>();
 
   const initContract = async () => {
@@ -31,8 +23,7 @@ export const TicketProvider = ({ children, address }) => {
 
   const getBalance = async () => {
     const ethBalance = await contract.getBalance();
-    const formatBalance = ethers.utils.formatEther(ethBalance);
-    setBalance(formatBalance);
+    setBalance(ethers.utils.formatEther(ethBalance));
   };
 
   const getPrice = async () => {
@@ -55,14 +46,6 @@ export const TicketProvider = ({ children, address }) => {
     setOwner(owner);
   };
 
-  const getWinner = async () => {
-    const winner: TWinner = await contract.getWinner();
-    if (winner.winner !== "0x0000000000000000000000000000000000000000") {
-      const block = await getProvider().getBlock(winner.number.toNumber());
-      setWinner(winner);
-    }
-  };
-
   const sendRegister = async () => {
     try {
       const tx = await contract.register({
@@ -81,7 +64,6 @@ export const TicketProvider = ({ children, address }) => {
     getPrice();
     getBalance();
     getPlayers();
-    getWinner();
     getLimit();
     getOwner();
   };
@@ -100,7 +82,6 @@ export const TicketProvider = ({ children, address }) => {
         price,
         players,
         sendRegister,
-        winner,
         limit,
         owner,
       }}

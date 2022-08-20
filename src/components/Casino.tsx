@@ -1,11 +1,7 @@
 import React, { useContext } from "react";
-import {
-  TicketProvider,
-  CasinoContext,
-  LotteryMachineProvider,
-} from "@contexts";
-import { Ticket } from "./Ticket";
+import { CasinoContext, LotteryMachineProvider } from "@contexts";
 import { LotteryMachine } from "./LotteryMachine";
+import { getHash } from "@utils";
 
 export const Casino = () => {
   const { contract, owner, balance, machines, deployCasino, createMachine } =
@@ -16,8 +12,8 @@ export const Casino = () => {
       <button onClick={deployCasino}>Deploy New Casino</button>
       {contract && (
         <>
-          <div>Casino: {contract?.address}</div>
-          <div>Owner: {owner}</div>
+          <div>Casino: {getHash(contract?.address)}</div>
+          <div>Owner: {getHash(owner)}</div>
           <div>Balance: {balance}</div>
           <button onClick={createMachine}>Create new Machine</button>
           <div className="grid2">

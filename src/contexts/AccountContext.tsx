@@ -15,51 +15,60 @@ export const AccountProvider = ({ children }) => {
   const checkMetaMask = async () => {
     if (!ethereum) {
       toast("Please install MetaMask");
+    } else {
+      getAccount();
     }
   };
 
   const initEvents = async () => {
     ethereum?.on("accountsChanged", function (accounts: string[]) {
       setAccount(accounts[0]);
+      getBalance();
     });
   };
 
   const getAccount = async () => {
-    const accounts = await ethereum.request({ method: "eth_accounts" });
-    if (accounts.length) {
-      setAccount(accounts[0]);
+    try {
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      if (accounts.length) {
+        setAccount(accounts[0]);
+      }
+    } catch (error) {
+      toast("error", { type: "error" });
     }
   };
 
   const requestAccounts = async () => {
     try {
-      await ethereum.request({
+      const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
+      if (accounts.length) {
+        setAccount(accounts[0]);
+        getBalance();
+      }
     } catch (error) {
       window.open(METAMASK_LINK);
     }
   };
 
   const getBalance = async () => {
-    const ethBalance = await ethereum.request({
+    console.log("getBalance", account);
+    const balance = await ethereum.request({
       method: "eth_getBalance",
       params: [account],
     });
-    const formatBalance = ethers.utils.formatEther(ethBalance);
-    setBalance(formatBalance);
-    return formatBalance;
+    setBalance(ethers.utils.formatEther(balance));
   };
 
   useEffect(() => {
-    checkMetaMask();
-    getAccount();
     initEvents();
-  }, []);
-
-  useEffect(() => {
     account && getBalance();
   }, [account]);
+
+  useEffect(() => {
+    checkMetaMask();
+  }, [ethereum?.isConnected()]);
 
   return (
     <AccountContext.Provider value={{ account, balance, requestAccounts }}>

@@ -69,6 +69,7 @@ a:visited {
   position: absolute;
   right: 0;
   padding: 10px;
+  text-align: right;
 }
 
 .nav_left > a {
@@ -110,6 +111,10 @@ a:visited {
 }
 
 .slot_img {
+  width: 150px;
+}
+
+.ticket_img {
   width: 150px;
 }
 

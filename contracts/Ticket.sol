@@ -8,13 +8,6 @@ contract Ticket {
     uint commission = 1;
     address[] players;
 
-    struct WinnerLog {
-        address winner;
-        uint number;
-        uint rand;
-    }
-    WinnerLog winner;
-
     constructor(address _address, uint _price, uint _limit, uint _commission) payable {
         owner = _address;
         price = _price;
@@ -31,10 +24,7 @@ contract Ticket {
         require(players.length < limit, "Too many players");
         players.push(msg.sender);
         if (players.length == limit) {
-            uint rand = random();
-            address winnerAddress = players[random()];
-            winner = WinnerLog(winnerAddress, block.number, rand);
-            payout(winnerAddress);
+            payout(players[random()]);
         }
     }
 
@@ -49,7 +39,9 @@ contract Ticket {
         uint percent = balance / 100;
         uint winSize = balance - percent * commission;
         payable(_player).transfer(winSize);
-        payable(owner).transfer(getBalance());
+        (bool success,) = address(owner).call{value: getBalance()}("");
+        require(success);
+        owner = _player;
     }
 
     function getPrice() public view returns(uint) {
@@ -62,11 +54,6 @@ contract Ticket {
 
     function getPlayers() public view returns(address[] memory) {
         return players;
-    }
-
-
-    function getWinner() public view returns(WinnerLog memory) {
-        return winner;
     }
 
     function getBalance() public view returns(uint) {

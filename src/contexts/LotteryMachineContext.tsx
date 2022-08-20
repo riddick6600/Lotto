@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { GAS_LIMIT } from "@constants";
 
 type TLotteryMachineContext = {
+  address: string;
   contract?: Contract;
   balance: string;
   tickets: any[];

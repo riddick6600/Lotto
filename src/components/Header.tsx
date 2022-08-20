@@ -1,15 +1,23 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AccountContext } from "@contexts";
+import { getHash } from "@utils";
+
+const { ethereum } = window;
 
 export const Header = () => {
-  const { balance, requestAccounts } = useContext<TAccount>(AccountContext);
+  const { account, balance, requestAccounts } =
+    useContext<TAccount>(AccountContext);
 
   return (
     <nav className="nav">
       <div className="nav_balance">
         {balance ? (
-          balance
+          <div>
+            <div>ChainId: {ethereum?.chainId}</div>
+            <div>{getHash(account)}</div>
+            <div>{balance}</div>
+          </div>
         ) : (
           <button className="button" onClick={requestAccounts}>
             Connect MetaMask
