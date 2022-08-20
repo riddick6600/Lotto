@@ -30,6 +30,8 @@ contract Ticket {
     receive() external payable {
         emit Received(msg.sender, msg.value);
     }
+    
+    fallback() external payable {}
         
     function register() public payable {
         require(msg.value >= price, "Price is upper");

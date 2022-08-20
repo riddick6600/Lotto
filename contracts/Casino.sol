@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
 import "./LotteryMachine.sol";
 
 contract Casino {
@@ -17,6 +18,8 @@ contract Casino {
     receive() external payable {
         emit Received(msg.sender, msg.value);
     }
+    
+    fallback() external payable {}
     
     function createMachine() public payable returns(LotteryMachine) {
         LotteryMachine machine = new LotteryMachine();

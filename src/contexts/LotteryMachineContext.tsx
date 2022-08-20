@@ -62,7 +62,7 @@ export const LotteryMachineProvider = ({ address, children }) => {
       await tx.wait();
       getAllData();
     } catch (error) {
-      toast(error.data.message, { type: "error" });
+      toast(error.message, { type: "error" });
     }
   };
 

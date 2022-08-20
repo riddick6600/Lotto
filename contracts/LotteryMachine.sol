@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
 import "./Ticket.sol";
 
 contract LotteryMachine {
@@ -32,6 +33,8 @@ contract LotteryMachine {
     receive() external payable {
         emit Received(msg.sender, msg.value);
     }
+    
+    fallback() external payable {}
     
     function createTicket(uint _price, uint _limit) public payable returns(Ticket) {
         require(_limit > 1, "Limit must be from 2 to 255");
