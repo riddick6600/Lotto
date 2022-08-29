@@ -4,3 +4,4 @@ export * from "./Wallet";
 export * from "./LotteryMachine";
 export * from "./Header";
 export * from "./Casino";
+export * from "./SvgLogo";

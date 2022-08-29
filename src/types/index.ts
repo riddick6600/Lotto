@@ -1,5 +1,5 @@
-type TAccount = {
+export type TAccount = {
   account: string;
   balance: string;
-  requestAccounts: () => {};
+  requestAccounts?: () => {};
 };

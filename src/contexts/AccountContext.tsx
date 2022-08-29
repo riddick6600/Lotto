@@ -1,12 +1,15 @@
 import React, { useEffect, useState, createContext, ReactElement } from "react";
 import { ethers } from "ethers";
-import { TAccouunt } from "@types";
+import { TAccount } from "@types";
 import { toast } from "react-toastify";
 import { METAMASK_LINK } from "@constants";
 
 const { ethereum } = window;
 
-export const AccountContext = createContext<TAccouunt | null>(null);
+export const AccountContext = createContext<TAccount>({
+  account: "",
+  balance: "",
+});
 
 export const AccountProvider = ({ children }) => {
   const [account, setAccount] = useState("");
