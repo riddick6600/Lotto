@@ -53,7 +53,6 @@ export const AccountProvider = ({ children }) => {
   };
 
   const getBalance = async () => {
-    console.log("getBalance", account);
     const balance = await ethereum.request({
       method: "eth_getBalance",
       params: [account],

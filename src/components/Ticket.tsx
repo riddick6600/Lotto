@@ -9,10 +9,6 @@ export const Ticket = () => {
 
   const winner = owner !== address ? owner : null;
 
-  console.log("winner", winner);
-  console.log("owner", owner);
-  console.log("address", address);
-
   if (!balance) {
     return null;
   }

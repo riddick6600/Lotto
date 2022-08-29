@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Lottery } from "@components";
 import { LotteryMachineContext } from "@contexts";
 import { getHash } from "@utils";
@@ -8,11 +8,19 @@ export const LotteryMachine = () => {
     LotteryMachineContext
   );
 
+  const [form, setForm] = useState({
+    price: "",
+    limit: "",
+  });
+
   const handleClick = () => {
-    createTicket(
-      document.querySelector("[name=price]").value,
-      document.querySelector("[name=limit]").value
-    );
+    createTicket(form.price, form.limit);
+  };
+
+  const handleChange = ({ target }) => {
+    setForm((prev) => {
+      return { ...prev, [target.name]: target.value };
+    });
   };
 
   return (
@@ -25,8 +33,20 @@ export const LotteryMachine = () => {
           <div>Balance: {balance}</div>
           <br />
           <div>
-            <input placeholder="Price ETH" type="number" name="price" />
-            <input placeholder="Limit players" type="number" name="limit" />
+            <input
+              placeholder="Price ETH"
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+            />
+            <input
+              placeholder="Limit players"
+              type="number"
+              name="limit"
+              value={form.limit}
+              onChange={handleChange}
+            />
             <button onClick={handleClick}>Create ticket</button>
           </div>
         </>

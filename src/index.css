@@ -121,3 +121,7 @@ a:visited {
 .machine {
   text-align: center;
 }
+
+.hash {
+  cursor: copy;
+}

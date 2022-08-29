@@ -32,7 +32,6 @@ contract LotteryMachine {
 
     receive() external payable {
         // come += msg.value;
-        // console.log(come);
 
         uint balance = getBalance();
         uint percent = balance / 100;
