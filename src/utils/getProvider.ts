@@ -2,6 +2,6 @@ import { ethers } from "ethers";
 
 const { ethereum } = window;
 
-export const getProvider = () => new ethers.providers.Web3Provider(ethereum);
+export const getProvider = () => new ethers.BrowserProvider(ethereum);
 
-export const getSigner = () => getProvider().getSigner();
+export const getSigner = async () => await getProvider().getSigner();

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 
 import { AccountContext } from "@contexts";
-import { Home, Storage } from "@pages";
+import { Home, MyTickets } from "@pages";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { METAMASK_LINK } from "@constants";
 
 export const Auth = () => {
@@ -19,8 +19,7 @@ export const Auth = () => {
       ) : (
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/" element={} /> */}
-          {/* <Route path="/storage" element={<Storage />} /> */}
+          <Route path="/my-tickets" element={<MyTickets />} />
         </Routes>
       )}
     </>

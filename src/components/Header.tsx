@@ -18,7 +18,7 @@ export const Header = () => {
           <div>
             <div>ChainId: {ethereum?.chainId}</div>
             <div>{getHash(account)}</div>
-            <div>{balance}</div>
+            <div>{balance} ETH</div>
           </div>
         ) : (
           <button className="button" onClick={requestAccounts}>
@@ -30,8 +30,14 @@ export const Header = () => {
         <Link to="/">
           <SvgLogo />
         </Link>
-        <Link to="/">ETHERIUM LOTTERY</Link>
+        <Link to="/">ETHEREUM LOTTERY</Link>
       </div>
+      {account && (
+        <div className="nav_menu">
+          <Link to="/" className="nav_link">Home</Link>
+          <Link to="/my-tickets" className="nav_link">My Tickets</Link>
+        </div>
+      )}
     </nav>
   );
 };

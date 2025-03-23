@@ -60,7 +60,7 @@ export const AccountProvider = ({ children }) => {
       method: "eth_getBalance",
       params: [account],
     });
-    setBalance(ethers.utils.formatEther(balance));
+    setBalance(ethers.formatEther(balance));
   };
 
   useEffect(() => {
