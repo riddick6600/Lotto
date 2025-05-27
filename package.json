@@ -7,7 +7,10 @@
     "dev": "vite",
     "hardhat": "npx hardhat node",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "npx playwright test --reporter=list",
+    "test:ui": "npx playwright test --ui",
+    "screenshot": "npx playwright test --grep screenshot --reporter=list"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",

@@ -37,7 +37,7 @@ test('Full Lotto App test with MetaMask simulation', async ({ page }) => {
 
   // Эмулируем подключенный MetaMask
   await page.evaluate(async (walletAddress) => {
-    console.log('Injecting mock MetaMask...');
+    // @ts-ignore
     window.ethereum = {
       isMetaMask: true,
       chainId: '0x7A69', // Hardhat chainId (31337)
@@ -98,7 +98,7 @@ test('Full Lotto App test with MetaMask simulation', async ({ page }) => {
     };
 
     // Эмитируем событие инициализации MetaMask
-    console.log('Dispatching ethereum initialized event');
+    // @ts-ignore
     window.dispatchEvent(new Event('ethereum#initialized'));
   }, address);
 
@@ -108,7 +108,9 @@ test('Full Lotto App test with MetaMask simulation', async ({ page }) => {
   const connectButton = page.locator('button:has-text("Connect MetaMask")').first();
   console.log('Clicking Connect MetaMask button');
   await connectButton.click();
-  await page.waitForTimeout(2000);
+
+  // Явно ждем появления кнопки "Deploy New Casino"
+  await page.waitForSelector('button:has-text("Deploy New Casino")', { timeout: 15000 });
 
   console.log('Connected to MetaMask');
   await takeScreenshot(page, '02-connected-metamask');
@@ -152,8 +154,8 @@ test('Full Lotto App test with MetaMask simulation', async ({ page }) => {
 
   // Создаем второй адрес для покупки второго билета
   await page.evaluate(async () => {
-    console.log('Creating second wallet');
     const secondAddress = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'; // Второй аккаунт Hardhat
+    // @ts-ignore
     window.ethereum.selectedAddress = secondAddress;
     console.log('Second wallet created:', secondAddress);
   });

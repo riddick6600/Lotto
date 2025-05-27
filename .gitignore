@@ -12,4 +12,7 @@ cache
 artifacts
 typechain-types
 
-
+playwright-report
+test-results
+screenshots
+tests/screenshot*
