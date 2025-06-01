@@ -14,8 +14,9 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
   workers: 1, // Один воркер для избежания конфликтов
-  reporter: [['html'], ['line']],
+  reporter: [['line']],
   use: {
+    headless: false,
     actionTimeout: 15000,
     baseURL: 'http://localhost:8080',
     trace: 'on',

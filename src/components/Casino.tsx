@@ -1,11 +1,20 @@
-import React, { useContext } from "react";
 import { CasinoContext, LotteryMachineProvider } from "@contexts";
-import { LotteryMachine } from "./LotteryMachine";
 import { getHash } from "@utils";
+import React, { useContext } from "react";
+import { LotteryMachine } from "./LotteryMachine";
 
 export const Casino = () => {
   const { contract, owner, balance, machines, deployCasino, createMachine } =
     useContext(CasinoContext);
+
+  console.log('[Casino] render', {
+    contract: contract?.address,
+    owner,
+    balance,
+    machines,
+    hasDeploy: !!deployCasino,
+    hasCreate: !!createMachine
+  });
 
   return (
     <div className="casino">

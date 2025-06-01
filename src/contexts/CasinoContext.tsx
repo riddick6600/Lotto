@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { ethers, ContractFactory, Contract } from "ethers";
-import { casinoAbi, casinoBytecode } from "../abi";
-import { getSigner } from "@utils";
-import { toast } from "react-toastify";
 import { GAS_LIMIT } from "@constants";
+import { getSigner } from "@utils";
+import { Contract, ContractFactory, ethers } from "ethers";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { casinoAbi, casinoBytecode } from "../abi";
 
 type TCasinoContext = {
   contract?: Contract;
@@ -30,7 +30,7 @@ export const CasinoProvider = ({ children }) => {
 
   const initContractFromLocalStorage = async () => {
     const address = localStorage.getItem(LOCAL_STORAGE_CASINO_CONTRACT_ADDRESS);
-
+    console.log('[CasinoContext] initContractFromLocalStorage, address:', address);
     if (address) {
       const contract = new ethers.Contract(address, casinoAbi, getSigner());
       setContract(contract);
@@ -39,12 +39,14 @@ export const CasinoProvider = ({ children }) => {
 
   const deployCasino = async () => {
     try {
+      console.log('[CasinoContext] deployCasino called');
       const factory = new ContractFactory(
         casinoAbi,
         casinoBytecode,
         getSigner()
       );
       const contract = await factory.deploy({ gasLimit: GAS_LIMIT });
+      console.log('[CasinoContext] Casino deployed, address:', contract.address);
       setContract(contract);
       localStorage.setItem(
         LOCAL_STORAGE_CASINO_CONTRACT_ADDRESS,
@@ -52,6 +54,7 @@ export const CasinoProvider = ({ children }) => {
       );
     } catch (error) {
       toast(`Error ${error.message}`, { type: "error" });
+      console.error('[CasinoContext] deployCasino error:', error);
     }
   };
 
@@ -97,6 +100,7 @@ export const CasinoProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('[CasinoContext] useEffect, contract:', contract);
     !contract && initContractFromLocalStorage();
     contract && getAllData();
   }, [contract]);
